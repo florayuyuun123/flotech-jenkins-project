@@ -7,12 +7,12 @@
  <packaging>war</packaging>
  <version>0.0.2-SNAPSHOT</version>
  
- <name>cloud14-app</name>
- <description>cloud14-app</description>
+ <name>flotech-app</name>
+ <description>flotech-app</description>
  
  <organization>
-  <name>Cloud14</name>
-  <url>http://cloud14.com/</url>
+  <name>flotech</name>
+  <url>http://flotech.com/</url>
  </organization>
  
  <properties>
@@ -21,11 +21,11 @@
   <junit.version>5.9.2</junit.version>
   <log4j.version>2.20.0</log4j.version>
   <mockito.version>5.7.0</mockito.version>
-  <sonar.host.url>http://18.141.9.26:8089</sonar.host.url>
-  <sonar.token>squ_a2b478d11e6ce4ec50e45391d9ff1fc046829d89</sonar.token>
+  <sonar.host.url>http://44.193.4.200:9000</sonar.host.url>
+  <sonar.token>squ_13081bfd0821900fe8f16945944d91355e585f85</sonar.token>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  <sonar.projectName>cloud14-app</sonar.projectName>
+  <sonar.projectName>flotech-app</sonar.projectName>
  </properties>
 
  <dependencies>
@@ -103,18 +103,18 @@
  <distributionManagement>
   <repository>
    <id>nexus</id>
-   <name>Cloud14-app-release</name>
-   <url>http://18.141.137.241:8087/repository/cloud14-app-release</url>
+   <name>flotech-app-release</name>
+   <url>http://3.234.228.129:8081/repository/flotech-app-release</url>
   </repository>
   <snapshotRepository>
    <id>nexus</id>
-   <name>Cloud14-app-snapshot</name>
-   <url>http://18.141.137.241:8087/repository/cloud14-app-snapshot</url>
+   <name>flotech-app-snapshot</name>
+   <url>http://3.234.228.129:8081/repository/flotech-app-snapshot</url>
   </snapshotRepository>
  </distributionManagement>
 
  <build>
-  <finalName>cloud14-app</finalName>
+  <finalName>flotech-app</finalName>
   <plugins>
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
