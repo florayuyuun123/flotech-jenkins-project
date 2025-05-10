@@ -1,70 +1,68 @@
 pipeline {
-    agent { label 'Agent1' }  // Replace 'wsl-agent' with the label of your agent
-
+    agent { label 'mss' }
     environment {
-        GITHUB_REPO_URL = 'https://github.com/anebota/techpulse.git'
-        BRANCH_NAME = 'main'  // Replace with your branch name if it's not 'main'
-        GITHUB_CREDENTIALS_ID = 'jenkins-github-creds'  // Replace with your Jenkins GitHub credentials ID
-        DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockerhub-creds'  // Replace with your Jenkins Docker Hub credentials ID
-        DOCKERHUB_REPO = 'anebota/jenkins-job-repo'  // Replace with your Docker Hub repository
+        GITHUB_REPO_URL = 'https://github.com/florayuyuun123/flotech-jenkins-project.git'
+        BRANCH_NAME = 'main'
+        GITHUB_CREDENTIALS_ID = 'jenkins-github-creds'
+        DOCKERHUB_CREDENTIALS_ID = 'dockerhub-PAT-creds'
+        DOCKERHUB_REPO = 'anebota/jenkins-job-repo'
     }
-
     stages {
         stage('Agent Details') {
             steps {
                 echo "Running on agent: ${env.NODE_NAME}"
-                sh 'uname -a'  // Print system information
-                sh 'whoami'    // Print the current user
+                sh 'uname -a'
+                sh 'whoami'
             }
         }
-
         stage('Clone Repository') {
             steps {
                 git branch: "${env.BRANCH_NAME}", url: "${env.GITHUB_REPO_URL}", credentialsId: "${env.GITHUB_CREDENTIALS_ID}"
             }
         }
-
         stage('Build') {
             steps {
-                sh 'mvn clean package'  // Simple Maven build
+                sh 'mvn clean package'
             }
         }
-
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'docker --version'  // Verify Docker installation
-                    sh "docker build -t ${env.DOCKERHUB_REPO}:latest ."  // Build Docker image
+                    sh 'docker --version'
+                    // Echo the repo name to verify it's correctly formatted
+                    echo "Building Docker image: ${env.DOCKERHUB_REPO}:latest"
+                    sh "docker build -t ${env.DOCKERHUB_REPO}:latest ."
                 }
             }
         }
-
         stage('Docker Push') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                    withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PAT')]) {
+                        echo "Logging into Docker Hub as ${DOCKER_USERNAME}"
+                        // Using the newer recommended authentication approach
+                        sh 'echo $DOCKER_PAT | docker login -u $DOCKER_USERNAME --password-stdin'
                         sh "docker push ${env.DOCKERHUB_REPO}:latest"
                         sh 'docker logout'
                     }
                 }
             }
         }
-
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh "docker run --name dev-init-app --rm -d -p 8383:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
+                    sh 'docker stop ms-app || true'
+                    sh 'docker rm ms-app || true'
+                    sh "docker run --name ms-app --rm -d -p 8282:8080 ${env.DOCKERHUB_REPO}:latest"
                 }
             }
         }
     }
-
     post {
         always {
             echo 'Cleaning up Docker containers and images...'
-            sh 'docker rm $(docker ps -a -q) || true'
-            sh 'docker rmi $(docker images -q) || true'
+            sh 'docker container prune -f || true'
+            sh 'docker image prune -af || true'
         }
         success {
             echo 'Pipeline completed successfully!'
