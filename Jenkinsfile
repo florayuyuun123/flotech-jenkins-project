@@ -1,11 +1,11 @@
 pipeline {
-    agent { label 'mss' }
+    agent { label 'flo-agent' }
     environment {
         GITHUB_REPO_URL = 'https://github.com/florayuyuun123/flotech-jenkins-project.git'
         BRANCH_NAME = 'main'
         GITHUB_CREDENTIALS_ID = 'jenkins-github-creds'
-        DOCKERHUB_CREDENTIALS_ID = 'dockerhub-PAT-creds'
-        DOCKERHUB_REPO = 'anebota/jenkins-job-repo'
+        DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockehub-creds'
+        DOCKERHUB_REPO = 'yuyuun/pipeline-job'
     }
     stages {
         stage('Agent Details') {
