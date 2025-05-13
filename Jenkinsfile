@@ -3,7 +3,7 @@ pipeline {
     environment {
         GITHUB_REPO_URL = 'https://github.com/florayuyuun123/flotech-jenkins-project.git'
         BRANCH_NAME = 'main'
-        GITHUB_CREDENTIALS_ID = 'jenkins-github-creds'
+        GITHUB_CREDENTIALS_ID = 'jenkins-github-credss'
         DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockehub-creds'
         DOCKERHUB_REPO = 'yuyuun/pipeline-job'
     }
